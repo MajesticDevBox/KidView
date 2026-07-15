@@ -1,0 +1,4 @@
+- [x] Centralize SDK versions in `libs.versions.toml`
+- [x] Update `app/build.gradle.kts` to use centralized SDK versions
+- [/] Verify project sync
+- [ ] Verify project build

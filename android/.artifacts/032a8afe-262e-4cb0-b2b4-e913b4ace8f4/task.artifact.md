@@ -1,0 +1,5 @@
+- [x] Update `gradle.properties` to remove legacy flags
+- [x] Update `app/build.gradle.kts` to use built-in Kotlin and `compilerOptions`
+- [x] Update root `build.gradle.kts` to remove Kotlin plugin
+- [x] Update `gradle/libs.versions.toml` to remove Kotlin plugin definition
+- [x] Verify changes with Gradle sync and build
