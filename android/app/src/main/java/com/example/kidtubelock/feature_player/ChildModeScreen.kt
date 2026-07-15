@@ -490,6 +490,7 @@ private fun PortraitViewer(
     timeLimitRemainingLabel: String?,
     timeLimitReached: Boolean,
     videoIds: List<String>,
+    playlistId: String?,
     onParentUnlock: () -> Unit,
 ) {
     Column(
@@ -509,6 +510,7 @@ private fun PortraitViewer(
                 else -> "Viewer"
             },
             videoIds = videoIds,
+            playlistId = playlistId,
             onParentUnlock = onParentUnlock,
             modifier = Modifier.weight(1f),
         )
@@ -611,7 +613,7 @@ private fun PlayerShellCard(
                 )
             }
 
-            if (canPlay && videoIds.isNotEmpty()) {
+            if (canPlay && (videoIds.isNotEmpty() || !playlistId.isNullOrBlank())) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
