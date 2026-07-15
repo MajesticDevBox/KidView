@@ -31,4 +31,12 @@ class YouTubeEmbedHtmlBuilderTest {
         assertTrue(html.contains("playlistIds = [\"abc123\",\"def456\"]"))
         assertTrue(html.contains("loadPlaylist"))
     }
+
+    @Test
+    fun buildHostedPlaylistHtml_usesVideoseriesEmbedForDirectPlaylistLink() {
+        val html = YouTubeEmbedHtmlBuilder.buildHostedPlaylistHtml("PL123456")
+
+        assertTrue(html.contains("videoseries?list=PL123456"))
+        assertTrue(html.contains("youtube-nocookie.com"))
+    }
 }

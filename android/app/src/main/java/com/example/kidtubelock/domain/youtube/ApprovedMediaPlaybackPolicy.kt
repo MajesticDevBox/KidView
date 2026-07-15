@@ -26,19 +26,26 @@ object ApprovedMediaPlaybackPolicy {
                 detailMessage = "This approved video can launch in child mode right now.",
             )
 
-            MediaType.PLAYLIST -> if (item.playlistEntries.isNotEmpty()) {
-                PlaybackSupport(
+            MediaType.PLAYLIST -> when {
+                item.playlistEntries.isNotEmpty() -> PlaybackSupport(
                     availability = PlaybackAvailability.PLAYABLE_NOW,
                     isPlayableNow = true,
                     statusLabel = "Playlist ready",
                     detailMessage = "This curated playlist can launch in child mode right now.",
                 )
-            } else {
-                PlaybackSupport(
+
+                item.youtubeId.isNotBlank() -> PlaybackSupport(
+                    availability = PlaybackAvailability.PLAYABLE_NOW,
+                    isPlayableNow = true,
+                    statusLabel = "Playlist link ready",
+                    detailMessage = "This YouTube playlist link can launch in child mode right now.",
+                )
+
+                else -> PlaybackSupport(
                     availability = PlaybackAvailability.UNSUPPORTED_PLAYLIST,
                     isPlayableNow = false,
-                    statusLabel = "Stored only",
-                    detailMessage = "Legacy YouTube playlist links are still stored, but custom KidTubeLock playlists are the supported playback path.",
+                    statusLabel = "Unavailable",
+                    detailMessage = "Add a YouTube playlist link or at least one playlist video before starting child mode.",
                 )
             }
 

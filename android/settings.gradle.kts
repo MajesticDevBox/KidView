@@ -17,5 +17,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "KidViewAndroid"
+rootProject.name = "KidTubeLock"
 include(":app")
+

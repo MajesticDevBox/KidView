@@ -74,10 +74,11 @@ fun ChildModeScreen(
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     val item = uiState.item
     val videoIdsToPlay = uiState.videoIdsToPlay
+    val hostedPlaylistIdToPlay = uiState.hostedPlaylistIdToPlay
     val sessionPolicy = uiState.sessionPolicy
     val unlockErrorMessage = uiState.unlockErrorMessage
     val canPlay = uiState.playbackAvailability == PlaybackAvailability.PLAYABLE_NOW &&
-        videoIdsToPlay.isNotEmpty()
+        (videoIdsToPlay.isNotEmpty() || !hostedPlaylistIdToPlay.isNullOrBlank())
     val sessionTimerText = uiState.timeLimitRemainingLabel?.let { "$it left" }
 
     BackHandler(enabled = sessionPolicy.absorbBackPress) {
@@ -134,6 +135,7 @@ fun ChildModeScreen(
             if (canPlay) {
                 LandscapeViewer(
                     videoIds = videoIdsToPlay,
+                    playlistId = hostedPlaylistIdToPlay,
                     sessionTimerText = sessionTimerText,
                     onParentUnlock = viewModel::openUnlockPrompt,
                 )
@@ -155,6 +157,7 @@ fun ChildModeScreen(
                 timeLimitRemainingLabel = uiState.timeLimitRemainingLabel,
                 timeLimitReached = uiState.timeLimitReached,
                 videoIds = videoIdsToPlay,
+                playlistId = hostedPlaylistIdToPlay,
                 onParentUnlock = viewModel::openUnlockPrompt,
             )
         }
@@ -393,12 +396,14 @@ private fun PinKeyButton(
 @Composable
 private fun LandscapeViewer(
     videoIds: List<String>,
+    playlistId: String?,
     sessionTimerText: String?,
     onParentUnlock: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         YouTubeVideoPlayer(
             videoIds = videoIds,
+            playlistId = playlistId,
             modifier = Modifier.fillMaxSize(),
         )
 
@@ -558,6 +563,7 @@ private fun PlayerShellCard(
     playbackDetailMessage: String,
     viewerPillText: String,
     videoIds: List<String>,
+    playlistId: String?,
     onParentUnlock: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -617,6 +623,7 @@ private fun PlayerShellCard(
                 ) {
                     YouTubeVideoPlayer(
                         videoIds = videoIds,
+                        playlistId = playlistId,
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(22.dp)),

@@ -3,6 +3,43 @@ package com.example.kidtubelock.feature_player.playback
 object YouTubeEmbedHtmlBuilder {
     fun buildVideoHtml(videoId: String): String = buildPlaylistHtml(listOf(videoId))
 
+    fun buildHostedPlaylistHtml(playlistId: String): String {
+        val safePlaylistId = sanitizeVideoId(playlistId).orEmpty()
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+              <style>
+                html, body {
+                  margin: 0;
+                  padding: 0;
+                  width: 100%;
+                  height: 100%;
+                  background: #000000;
+                  overflow: hidden;
+                }
+                iframe {
+                  position: absolute;
+                  inset: 0;
+                  width: 100%;
+                  height: 100%;
+                  border: 0;
+                }
+              </style>
+            </head>
+            <body>
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/videoseries?list=$safePlaylistId&autoplay=1&playsinline=1&rel=0&fs=0&iv_load_policy=3&disablekb=1&controls=1"
+                allow="autoplay; encrypted-media"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </body>
+            </html>
+        """.trimIndent()
+    }
+
     fun buildPlaylistHtml(videoIds: List<String>): String {
         val safeVideoIds = videoIds.mapNotNull(::sanitizeVideoId).distinct()
         val firstVideoId = safeVideoIds.firstOrNull().orEmpty()

@@ -34,6 +34,7 @@ data class ChildModeUiState(
     val playbackStatusLabel: String = "",
     val playbackDetailMessage: String = "",
     val videoIdsToPlay: List<String> = emptyList(),
+    val hostedPlaylistIdToPlay: String? = null,
     val timeLimitMinutes: Int? = null,
     val timeLimitRemainingLabel: String? = null,
     val timeLimitReached: Boolean = false,
@@ -91,6 +92,11 @@ class ChildModeViewModel @Inject constructor(
                 com.example.kidtubelock.domain.model.MediaType.PLAYLIST -> item.playlistEntries.map { it.youtubeId }
                 null -> emptyList()
             }
+            val hostedPlaylistId = item
+                ?.takeIf { it.mediaType == com.example.kidtubelock.domain.model.MediaType.PLAYLIST }
+                ?.takeIf { it.playlistEntries.isEmpty() }
+                ?.youtubeId
+                ?.takeIf { it.isNotBlank() }
             ChildModeUiState(
                 item = item,
                 lockMode = childLockController.lockMode,
@@ -100,6 +106,7 @@ class ChildModeViewModel @Inject constructor(
                 playbackStatusLabel = playbackSupport.statusLabel,
                 playbackDetailMessage = playbackSupport.detailMessage,
                 videoIdsToPlay = playbackVideoIds.takeIf { playbackSupport.isPlayableNow }.orEmpty(),
+                hostedPlaylistIdToPlay = hostedPlaylistId.takeIf { playbackSupport.isPlayableNow },
                 timeLimitMinutes = settings.timeLimitMinutes,
                 timeLimitRemainingLabel = ChildModeTimeLimitPolicy.remainingLabel(
                     timeLimitStatus.remainingSeconds,

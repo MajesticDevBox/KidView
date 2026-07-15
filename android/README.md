@@ -1,8 +1,6 @@
-# KidTubeLock Android MVP
+# KidView
 
-This directory contains the imported Android MVP from the original local `kidtube` snapshot. It remains intentionally close to the source app while living inside the new dual-platform `KidView` repository.
-
-KidTubeLock is a private family-use Android app MVP for saving approved YouTube links and launching a locked-down child-mode placeholder screen. This first pass focuses on a clean, buildable foundation using Kotlin, Jetpack Compose, Material 3, Navigation Compose, Hilt, ViewModel, and DataStore.
+KidView is a private family-use Android app MVP for saving approved YouTube links and launching a locked-down child-mode placeholder screen. This first pass focuses on a clean, buildable foundation using Kotlin, Jetpack Compose, Material 3, Navigation Compose, Hilt, ViewModel, and DataStore.
 
 ## Current MVP scope
 

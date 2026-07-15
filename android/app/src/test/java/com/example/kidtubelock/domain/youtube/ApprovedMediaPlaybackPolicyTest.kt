@@ -4,7 +4,6 @@ import com.example.kidtubelock.domain.model.ApprovedMediaItem
 import com.example.kidtubelock.domain.model.MediaType
 import com.example.kidtubelock.domain.model.PlaylistVideoEntry
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -52,7 +51,7 @@ class ApprovedMediaPlaybackPolicyTest {
     }
 
     @Test
-    fun supportFor_legacyPlaylistLinkIsStoredButUnsupported() {
+    fun supportFor_directPlaylistLinkIsPlayableNow() {
         val item = ApprovedMediaItem(
             localId = "playlist",
             mediaType = MediaType.PLAYLIST,
@@ -63,8 +62,8 @@ class ApprovedMediaPlaybackPolicyTest {
 
         val support = ApprovedMediaPlaybackPolicy.supportFor(item)
 
-        assertEquals(PlaybackAvailability.UNSUPPORTED_PLAYLIST, support.availability)
-        assertFalse(support.isPlayableNow)
-        assertEquals("Stored only", support.statusLabel)
+        assertEquals(PlaybackAvailability.PLAYABLE_NOW, support.availability)
+        assertTrue(support.isPlayableNow)
+        assertEquals("Playlist link ready", support.statusLabel)
     }
 }

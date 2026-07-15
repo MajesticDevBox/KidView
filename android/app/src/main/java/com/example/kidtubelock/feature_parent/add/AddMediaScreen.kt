@@ -84,12 +84,12 @@ fun AddMediaScreen(
                     ParentSectionCard(
                         title = when (uiState.mode) {
                             AddMediaMode.VIDEO -> if (uiState.isEditMode) "Edit safe video" else "Add safe video"
-                            AddMediaMode.PLAYLIST -> if (uiState.isEditMode) "Edit local playlist" else "Build a local playlist"
+                            AddMediaMode.PLAYLIST -> if (uiState.isEditMode) "Edit playlist" else "Add playlist"
                             else -> "Add media"
                         },
                         subtitle = when (uiState.mode) {
                             AddMediaMode.VIDEO -> "Paste one YouTube video link and the app will try to import its title."
-                            AddMediaMode.PLAYLIST -> "Create a KidTubeLock playlist by adding multiple approved YouTube videos."
+                            AddMediaMode.PLAYLIST -> "Paste a YouTube playlist link or build a curated local playlist from approved videos."
                             else -> "Save approved media for child mode."
                         },
                     ) {
@@ -97,7 +97,7 @@ fun AddMediaScreen(
                             text = if (uiState.mode == AddMediaMode.VIDEO) {
                                 "Add Video can save a single video on its own or attach it to an existing playlist."
                             } else {
-                                "Add Playlist creates a local playlist container. It does not rely on a raw YouTube playlist link anymore."
+                                "Add Playlist can save a direct YouTube playlist link or create a local curated playlist that you control video by video."
                             },
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -275,8 +275,19 @@ private fun PlaylistFormSection(
 ) {
     ParentSectionCard(
         title = "Playlist details",
-        subtitle = "Name this playlist and explain what kind of videos it contains.",
+        subtitle = "Paste a YouTube playlist link or name a local playlist you want to build manually.",
     ) {
+        OutlinedTextField(
+            value = uiState.playlistUrl,
+            onValueChange = viewModel::onPlaylistUrlChanged,
+            label = { Text("YouTube playlist URL (optional)") },
+            modifier = Modifier.fillMaxWidth(),
+            colors = parentTextFieldColors(),
+            supportingText = {
+                Text("Use this for a direct YouTube playlist. Leave it blank if you are building a local playlist below.")
+            },
+        )
+
         OutlinedTextField(
             value = uiState.title,
             onValueChange = viewModel::onTitleChanged,
@@ -311,7 +322,7 @@ private fun PlaylistFormSection(
 
     ParentSectionCard(
         title = "Add videos",
-        subtitle = "Paste each YouTube video you want in this playlist.",
+        subtitle = "Optional. Add approved videos here to create a local curated playlist instead of relying on the raw YouTube playlist.",
     ) {
         OutlinedTextField(
             value = uiState.playlistVideoUrl,
@@ -341,7 +352,11 @@ private fun PlaylistFormSection(
     ParentSectionCard(
         title = "Playlist videos",
         subtitle = if (uiState.playlistEntries.isEmpty()) {
-            "No videos added yet."
+            if (uiState.playlistUrl.isBlank()) {
+                "No videos added yet."
+            } else {
+                "No local videos added yet. Child mode can still use the saved YouTube playlist link."
+            }
         } else {
             "${uiState.playlistEntries.size} videos ready for this playlist."
         },

@@ -50,6 +50,7 @@ data class AddMediaUiState(
     val importedThumbnailUrl: String = "",
     val videoSaveTarget: VideoSaveTarget = VideoSaveTarget.STANDALONE,
     val selectedPlaylistId: String? = null,
+    val playlistUrl: String = "",
     val availablePlaylists: List<PlaylistOption> = emptyList(),
     val playlistVideoUrl: String = "",
     val isImportingPlaylistVideo: Boolean = false,
@@ -116,6 +117,7 @@ class AddMediaViewModel @Inject constructor(
                             MediaType.PLAYLIST -> AddMediaUiState(
                                 mode = AddMediaMode.PLAYLIST,
                                 isEditMode = true,
+                                playlistUrl = item.originalUrl,
                                 title = item.displayTitle,
                                 subtitle = item.displaySubtitle,
                                 contextNote = item.contextNote,
@@ -189,6 +191,13 @@ class AddMediaViewModel @Inject constructor(
             errorMessage = null,
         )
         importPlaylistVideoMetadata(value)
+    }
+
+    fun onPlaylistUrlChanged(value: String) {
+        uiState = uiState.copy(
+            playlistUrl = value,
+            errorMessage = null,
+        )
     }
 
     fun addPendingVideoToPlaylist() {
@@ -323,15 +332,17 @@ class AddMediaViewModel @Inject constructor(
     }
 
     private fun savePlaylist(onSuccess: () -> Unit) {
+        val parsedPlaylist = YouTubeUrlParser.parse(uiState.playlistUrl)
+            ?.takeIf { it.mediaType == MediaType.PLAYLIST }
         if (uiState.title.trim().isBlank()) {
             uiState = uiState.copy(
                 errorMessage = "Enter a playlist name so it is easy to recognize.",
             )
             return
         }
-        if (uiState.playlistEntries.isEmpty()) {
+        if (uiState.playlistEntries.isEmpty() && parsedPlaylist == null) {
             uiState = uiState.copy(
-                errorMessage = "Add at least one video to the playlist before saving.",
+                errorMessage = "Paste a YouTube playlist link or add at least one video before saving.",
             )
             return
         }
@@ -341,9 +352,11 @@ class AddMediaViewModel @Inject constructor(
             val item = existingItem
             val now = System.currentTimeMillis()
             val playlistEntries = uiState.playlistEntries
-            val youtubeId = playlistEntries.first().youtubeId
-            val playlistOriginalUrl = item?.originalUrl.orEmpty()
+            val youtubeId = playlistEntries.firstOrNull()?.youtubeId
+                ?: parsedPlaylist!!.youtubeId
+            val playlistOriginalUrl = uiState.playlistUrl.trim().ifBlank { item?.originalUrl.orEmpty() }
             val thumbnailUrl = playlistEntries.firstOrNull()?.thumbnailUrl.orEmpty()
+            val expectedItemCount = playlistEntries.size.takeIf { it > 0 }
 
             if (uiState.isEditMode && item != null) {
                 repository.updateApprovedMedia(
@@ -354,7 +367,7 @@ class AddMediaViewModel @Inject constructor(
                         displayTitle = uiState.title.trim(),
                         displaySubtitle = uiState.subtitle.trim(),
                         contextNote = uiState.contextNote.trim(),
-                        expectedItemCount = playlistEntries.size,
+                        expectedItemCount = expectedItemCount,
                         thumbnailUrl = thumbnailUrl,
                         playlistEntries = playlistEntries,
                     ),
@@ -365,11 +378,11 @@ class AddMediaViewModel @Inject constructor(
                         localId = UUID.randomUUID().toString(),
                         mediaType = MediaType.PLAYLIST,
                         youtubeId = youtubeId,
-                        originalUrl = "",
+                        originalUrl = playlistOriginalUrl,
                         displayTitle = uiState.title.trim(),
                         displaySubtitle = uiState.subtitle.trim(),
                         contextNote = uiState.contextNote.trim(),
-                        expectedItemCount = playlistEntries.size,
+                        expectedItemCount = expectedItemCount,
                         thumbnailUrl = thumbnailUrl,
                         playlistEntries = playlistEntries,
                         addedAtEpochMillis = now,

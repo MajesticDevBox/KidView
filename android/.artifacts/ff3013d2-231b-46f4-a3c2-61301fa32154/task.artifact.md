@@ -1,0 +1,4 @@
+- [x] Update Hilt version in `libs.versions.toml`
+- [x] Run Gradle sync (if needed) and verify `kapt` task
+- [x] Run full build verification
+- [x] Create walkthrough

@@ -1,18 +1,17 @@
 # iOS Workspace
 
-Create the future Xcode project for KidView in this directory.
+This folder now contains the source scaffold for the future native iOS app.
 
-Recommended starting point:
+## What is here
 
-- App name: `KidView`
-- UI: SwiftUI
-- Web playback wrapper: `WKWebView`
-- Child lock flow: Guided Access aware, parent-initiated
+- `KidView/`: SwiftUI app source files to add to the Xcode target
+- `KidViewTests/`: starter unit tests for shared logic
 
-Suggested initial layout:
+## What is intentionally not here yet
 
 - `KidView.xcodeproj`
-- `KidView/`
-- `KidViewTests/`
-- `KidViewUITests/`
-- `Assets/`
+- signing configuration
+- asset catalogs
+- a finished player/lock implementation
+
+Create the Xcode project on the Mac first, then add these files by following [docs/ios/xcode-setup.md](../docs/ios/xcode-setup.md).

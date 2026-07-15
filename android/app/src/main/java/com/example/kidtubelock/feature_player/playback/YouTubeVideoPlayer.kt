@@ -21,11 +21,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 @Composable
 fun YouTubeVideoPlayer(
     videoIds: List<String>,
+    playlistId: String? = null,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val html = remember(videoIds) {
-        YouTubeEmbedHtmlBuilder.buildPlaylistHtml(videoIds)
+    val html = remember(videoIds, playlistId) {
+        when {
+            !playlistId.isNullOrBlank() -> YouTubeEmbedHtmlBuilder.buildHostedPlaylistHtml(playlistId)
+            else -> YouTubeEmbedHtmlBuilder.buildPlaylistHtml(videoIds)
+        }
     }
     val webView = remember {
         WebView(context).apply {
