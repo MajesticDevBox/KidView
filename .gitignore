@@ -1,0 +1,26 @@
+.DS_Store
+.idea/
+.vscode/
+.kotlin/
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/captures/
+
+# Signing material
+android/keys/
+*.jks
+*.keystore
+
+# iOS / Xcode
+ios/.build/
+ios/DerivedData/
+*.xcuserdatad/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
