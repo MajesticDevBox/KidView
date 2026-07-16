@@ -1,26 +1,18 @@
-# Migrate to AGP 9.0 Built-in Kotlin and compilerOptions DSL
+# Implementation Plan: Rename project references to KidView Lock
 
-This plan addresses the deprecation warnings and plugin usage warnings related to AGP 9.0 and Kotlin support.
+The goal is to ensure all references to "KidTubeLock" are removed and the app is consistently named "KidView Lock".
+
+## Findings
+- The app name in `strings.xml` is already `KidView Lock`.
+- The root project name in `settings.gradle.kts` is already `KidView Lock`.
+- Most source code references have already been renamed to `KidView`.
+- **Mismatch identified**: `AndroidManifest.xml` refers to `.app.KidViewLockApplication`, but the actual class name is `KidViewApplication`.
 
 ## Proposed Changes
 
-### [gradle.properties](file:///G:/Github%20Repos/KidView/android/gradle.properties)
-- Remove `android.builtInKotlin=false`
-- Remove `android.newDsl=false`
-
-### [app/build.gradle.kts](file:///G:/Github%20Repos/KidView/android/app/build.gradle.kts)
-- Remove `alias(libs.plugins.kotlin.android)` from the `plugins` block.
-- Replace the `kotlinOptions` block with `compilerOptions`.
-- Use `jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)` (or similar based on actual DSL).
-
-### [build.gradle.kts (root)](file:///G:/Github%20Repos/KidView/android/build.gradle.kts)
-- Remove `alias(libs.plugins.kotlin.android) apply false`.
-
-### [libs.versions.toml](file:///G:/Github%20Repos/KidView/android/gradle/libs.versions.toml)
-- Remove `kotlin-android` from the `[plugins]` section.
+### [AndroidManifest.xml](file:///G:/Github%20Repos/KidView/android/app/src/main/AndroidManifest.xml)
+- [MODIFY] Update `android:name` in the `<application>` tag to `.app.KidViewApplication` to match the existing class.
 
 ## Verification Plan
-
-### Automated Tests
-- Run `gradlew sync` to verify that the warnings are gone and the project syncs successfully.
-- Run `gradlew assembleDebug` to ensure the project still builds correctly.
+- **Build**: Run `gradlew :app:assembleDebug` to ensure the project still builds and the manifest change is correct.
+- **Visual Check**: Verify that "KidTubeLock" no longer appears in any source files (excluding artifacts).
