@@ -29,9 +29,11 @@ Important docs:
 
 The Android codebase came from a local app snapshot that still uses `KidTubeLock` internally in package names and some app identifiers.
 
-The repository brand and future product name are now:
+The repository brand and product display name are now:
 
-- `KidView`
+- `KidView Lock`
+
+Use `KidView Lock` for user-facing app names, headings, launcher labels, and marketing copy. Keep code identifiers, package names, bundle identifiers, and project names in identifier-safe forms such as `KidView`, `KidViewApp`, and `com.mdev.kidview`.
 
 Codex should preserve behavior first and rename internal identifiers only in deliberate, scoped passes.
 

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kidtubelock"
+    namespace = "com.mdev.kidview"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
