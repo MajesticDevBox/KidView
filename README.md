@@ -26,3 +26,9 @@ KidView is the clean, dual-platform home for this private family-use project. It
 1. Open `android/` in Android Studio, not the repo root. See `docs/android-studio-setup.md`.
 2. Create the Xcode project inside `ios/` when you are ready to begin the iPhone/iPad version.
 3. Decide whether to rename the remaining Android-internal `KidTubeLock` identifiers now or later.
+
+## License
+
+All rights reserved. See [`LICENSE`](LICENSE) — this repository is public
+for reference/portfolio purposes, but no reuse or redistribution is
+permitted without written permission.
