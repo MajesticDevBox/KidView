@@ -1,0 +1,8 @@
+- [x] Deep clean project caches
+    - [x] Delete `.gradle` directory
+    - [x] Delete `.kotlin` directory
+    - [x] Delete all `build` directories
+- [x] Verify fix
+    - [x] Run `gradlew clean`
+    - [x] Run `gradlew :app:hiltJavaCompileDebug`
+    - [x] Run `gradlew :app:assembleDebug`
